@@ -1,6 +1,6 @@
 # LLM Prompt Generator 🤖
 
-[Join Russian Speaking Telegram Channel](https://t.me/pavlin_share) | [Watch Russian Video Tutorial](coming_soon)
+[Join Russian Speaking Telegram Channel](https://t.me/pavlin_share) | [Watch Russian Video Tutorial](https://youtu.be/R1evjTkOB_4)
 
 A powerful and flexible tool for generating and managing prompts for different LLM providers. Currently supports OpenAI and Anthropic models with smart defaults (GPT-4o and Claude 3 Sonnet).
 
