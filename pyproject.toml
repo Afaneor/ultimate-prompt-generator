@@ -1,15 +1,76 @@
 [tool.poetry]
-name = "ultimate-prompt-generator"
+name = "upg-cli"
 version = "0.1.0"
-description = ""
-authors = ["npavlin <np@letsnova.ru>"]
+description = "Ultimate Prompt Generator - A CLI tool for generating LLM prompts"
+authors = ["npavlin <afaneor@gmail.com>"]
 readme = "README.md"
-packages = [{include = "ultimate_prompt_generator"}]
+packages = [{include = "upg", from = "src"}]
+license = "MIT"
+homepage = "https://github.com/Afaneor/ultimate-prompt-generator"
+repository = "https://github.com/Afaneor/ultimate-prompt-generator"
+keywords = ["llm", "prompt", "generator", "cli", "openai", "anthropic"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
 
 [tool.poetry.dependencies]
-python = "^3.11"
-llama-index = "^0.11.20"
+python = ">=3.11, <3.14"
+click = "^8.1.7"
+pydantic = "^2.0.0"
+llama-index = "^0.12"
+llama-index-llms-anthropic = "^0.6.5"
 
+[tool.poetry.scripts]
+upg = "upg.cli.commands:cli"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.9.6"
+pytest = "^8.3"
+isort = "^6"
+mypy = "^1.0.0"
+pyinstaller = "^6"
+
+[tool.ruff]
+# Включаем нужные правила
+lint.select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "C",   # flake8-comprehensions
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+]
+
+line-length = 80
+
+# Поддерживаемая версия Python
+target-version = "py312"
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+known-first-party = ["upg"]
+
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = "single"
+inline-quotes = "single"
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"floatingprompt.py" = ["E501"]  # ignore long lines in floating prompts
+"metaprompt.py" = ["E501"]  # ignore long lines in meta prompts
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,78 +1,212 @@
-# LLM Prompt Generator 🤖
+# Ultimate Prompt Generator (UPG) 🤖
+
+A powerful CLI tool for generating, managing, and reusing prompts for different LLM providers. 
+Currently supports OpenAI and Anthropic models with smart defaults.
 
 [Join Russian Speaking Telegram Channel](https://t.me/pavlin_share) | [Watch Russian Video Tutorial](https://youtu.be/R1evjTkOB_4)
 
-A powerful and flexible tool for generating and managing prompts for different LLM providers. Currently supports OpenAI and Anthropic models with smart defaults (GPT-4o and Claude 3 Sonnet).
-
-Totally inspired by [claude prompt generator](https://colab.research.google.com/drive/1SoAajN8CBYTl79VyTwxtxncfCWlHlyy9)
----
-
 ## 🌟 Features
 
-- 🔄 **Multi-Provider Support**: Works with both OpenAI and Anthropic models
-- 🎯 **Smart Defaults**: 
-  - OpenAI: `gpt-4o`
-  - Anthropic: `claude-3-sonnet-20240229`
-- 🔑 **API Key Management**: Secure storage and reuse of API keys
-- 💾 **Configuration Persistence**: Save and reuse your preferred settings
+- 🔄 **Multi-Provider Support**: 
+  - OpenAI (default: gpt-4o)
+  - Anthropic (default: claude-3-sonnet-20240229)
+- 📝 **Smart Prompt Generation**: 
+  - Generate high-quality prompts for various tasks
+  - Create prompts with or without variables
+  - Automatic variable detection and validation
+- 💾 **Prompt Management**:
+  - Save and reuse generated prompts
+  - Tag and categorize prompts
+  - Search through saved prompts
+- 🔑 **Secure Configuration**: Safe storage of API keys and preferences
 
 ## 🚀 Quick Start
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/llm-prompt-generator.git
-cd llm-prompt-generator
+# Install with pip
+pip install upg-cli
 
-# Install dependencies
-poetry install || pip install -r requirements.txt
-
-# Run the tool
-python main.py
+# Or install with Poetry
+poetry add upg-cli
 ```
 
-## 📋 Requirements
+### Initial Configuration
 
-Required packages:
-- Python 3.8+
-- llama-index
-- openai
-- anthropic
-
-## 🎮 Usage
-
-run `python main.py` and follow the prompts to generate your LLM prompts.
 ```bash
-python main.py
+# Configure your preferred LLM provider
+upg config --provider openai --api-key YOUR_API_KEY
 ```
 
-1. **Select LLM Provider**:
+### Basic Usage
+
 ```bash
-Select LLM provider: openai  # or anthropic
+# Generate a simple prompt without variables
+upg generate "Write a story about a space traveler"
+
+# Generate a prompt with variables
+upg generate "Create a Python function to calculate fibonacci numbers" \
+    -v FUNCTION_NAME \
+    -v ARGS \
+    --save --name "python-fibonacci" \
+    --tag python --tag math
+
+# Use a saved prompt
+upg answer python-fibonacci \
+    -v FUNCTION_NAME "fibonacci" \
+    -v ARGS "n: int"
 ```
 
-2. **Configure API Key**:
+## 📋 Detailed Usage Guide
+
+### Prompt Generation
+
+You can generate prompts both with and without variables:
+
 ```bash
-Enter API key: sk-...
+# Simple prompt without variables
+upg generate "Write a poem about autumn"
+
+# Prompt with variables
+upg generate "Write a {GENRE} story about {TOPIC}" \
+    -v GENRE \
+    -v TOPIC
+
+# Save generated prompt
+upg generate "Your task description" [options]
+
+Options:
+  --provider TEXT           LLM provider to use (openai/anthropic)
+  -v, --variable TEXT      Variable names for the prompt (optional)
+  -o, --output FILENAME    Save prompt to file
+  -s, --save              Save prompt for later use
+  --name TEXT             Name for saved prompt
+  -d, --description TEXT  Description for saved prompt
+  -t, --tag TEXT         Tags for categorizing the prompt
 ```
 
-3. **Choose Model** (defaults available):
+### Using Prompts
+
+For prompts without variables, you can use them directly:
 ```bash
-Enter model name (press Enter for default 'gpt-4o'): 
+# Using a simple prompt without variables
+upg answer simple-story
+
+# Using a prompt with variables
+upg answer story-template \
+    -v GENRE "mystery" \
+    -v TOPIC "lost artifact"
 ```
 
-4. **Generate Prompts**:
+### More Examples
+
+#### Simple Prompts (No Variables)
 ```bash
-Enter your task: Write a python function
-Do you want to input text? (y/n): n
-Do you want to specify variables? (y/n): y
+# Generate a blog post outline
+upg generate "Create an outline for a blog post about machine learning basics" \
+    --save --name "blog-outline" \
+    --tag content --tag blog
+
+# Generate coding guidelines
+upg generate "Write Python code style guidelines for a team" \
+    --save --name "python-guidelines" \
+    --tag python --tag guidelines
+
+# Use saved prompts
+upg answer blog-outline
+upg answer python-guidelines
 ```
 
-## 🗺️ Roadmap
+#### Prompts with Variables
+```bash
+# Generate a template for API documentation
+upg generate "Write documentation for a REST API endpoint" \
+    -v ENDPOINT \
+    -v METHOD \
+    --save --name "api-docs" \
+    --tag api
 
-- [ ] CLI interface using Click
-- [ ] Compiled versions for easy distribution
-- [ ] More LLM providers
+# Use the template
+upg answer api-docs \
+    -v ENDPOINT "/users" \
+    -v METHOD "POST"
+```
 
+## 🔧 Configuration
+
+UPG provides flexible configuration options through the `config` command group:
+
+### Provider Configuration
+
+```bash
+# Configure a provider
+upg config provider --provider openai --api-key YOUR_API_KEY --model gpt-4o
+
+# Or configure interactively
+upg config provider
+```
+
+### Default Provider
+
+```bash
+# Set default provider
+upg config set-default openai
+
+# Switch to using Anthropic by default
+upg config set-default anthropic
+```
+
+### View Configuration
+
+```bash
+# Show current configuration
+upg config show
+```
+
+Example output:
+```
+Current Configuration:
+----------------------------------------
+Default Provider: openai
+
+Configured Providers:
+
+OPENAI:
+  Model: gpt-4o
+  Temperature: 1.0
+  API Key: sk-abcd...wxyz
+
+ANTHROPIC:
+  Model: claude-3-sonnet-20240229
+  Temperature: 1.0
+  API Key: sk-ant...4321
+```
+
+### Configuration Storage
+
+The tool stores configuration in `~/.config/upg/config.json`:
+- API keys for LLM providers
+- Default provider settings
+- Provider-specific configurations
+- Saved prompts and their metadata
+
+## 🗃️ Prompt Storage
+
+Prompts are stored with:
+- Unique name
+- Description
+- Variables list (if any)
+- Tags for categorization
+- Creation and update timestamps
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
 
 ⭐ Found this useful? Star the repo and share it!
 
