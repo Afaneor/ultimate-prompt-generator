@@ -72,6 +72,10 @@ convention = "google"
 "floatingprompt.py" = ["E501"]  # ignore long lines in floating prompts
 "metaprompt.py" = ["E501"]  # ignore long lines in meta prompts
 
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
