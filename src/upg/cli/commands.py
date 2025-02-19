@@ -60,14 +60,16 @@ def provider(
             api_key = click.prompt(f'Enter {provider} API key', hide_input=True)
 
         if not model:
-            default_model = LLMProvider.get_default_model(provider)
+            default_model = LLMProvider.get_default_model(LLMProvider(provider))
             model = click.prompt(
                 'Enter model name', default=default_model, show_default=True
             )
 
-        config_manager.set_provider_config(
-            provider, {'api_key': api_key, 'model': model, 'temperature': 1.0}
-        )
+        if provider is not None:
+            config_manager.set_provider_config(
+                provider,
+                {'api_key': api_key, 'model': model, 'temperature': 1.0}
+            )
 
         click.echo(f'Configuration for {provider} saved successfully')
 
@@ -89,7 +91,7 @@ def set_default(provider: str):
                 f"Provider {provider} is not configured. Run 'upg config provider' first."  # noqa: E501
             )
 
-        config_manager.config.default_provider = provider
+        config_manager.config.default_provider = LLMProvider(provider)
         config_manager.save_config()
         click.echo(f'Default provider set to {provider}')
 

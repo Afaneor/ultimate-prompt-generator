@@ -3,7 +3,7 @@ from collections.abc import Callable
 from typing import Any
 
 from llama_index.core.chat_engine import SimpleChatEngine
-from llama_index.llms.anthropic import Anthropic
+from llama_index.llms.anthropic import Anthropic  # type: ignore
 from llama_index.llms.openai import OpenAI
 
 from upg.config.types import BaseLLMConfig, LLMProvider

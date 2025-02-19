@@ -18,11 +18,13 @@ logger = logging.getLogger(__name__)
 
 class ConfigManager:
     """Manages application configuration and provider settings"""
+    config_dir: Path
+    config_file: Path
+    config: AppConfig
 
     def __init__(self, config_dir: str | None = None):
-        if config_dir is None:
-            config_dir = Path.home() / '.config' / 'upg'
-        self.config_dir = Path(config_dir)
+        base_dir = str(Path.home() / '.config' / 'upg') if config_dir is None else config_dir  # noqa E501
+        self.config_dir = Path(base_dir)
         self.config_file = self.config_dir / 'config.json'
         self.config: AppConfig = self._load_config()
 

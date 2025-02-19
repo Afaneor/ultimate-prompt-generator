@@ -16,8 +16,9 @@ class LLMProvider(str, Enum):
         return [provider.value for provider in cls]
 
     @classmethod
-    def get_default_model(cls, provider: str | None) -> str:
-        """Returns default model for given provider"""
+    def get_default_model(cls, provider: str) -> str:
+        if provider is None:
+            return ''
         defaults = {
             cls.OPENAI.value: 'gpt-4o',
             cls.ANTHROPIC.value: 'claude-3-5-sonnet-20241022',
@@ -36,6 +37,10 @@ class BaseLLMConfig(BaseModel):
         le=2.0,
         description='Temperature for model responses',
     )
+
+    @classmethod
+    def default_model(cls) -> str:
+        return ''
 
 
 class OpenAIConfig(BaseLLMConfig):
