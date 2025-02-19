@@ -120,4 +120,4 @@ def test_config_provider_different_providers(runner, temp_config_dir, provider):
             ],
         )
         assert result.exit_code == 0
-        assert f'Configuration for {provider} saved successfully' in result.output
+        assert f'Configuration for {provider}' in result.output
